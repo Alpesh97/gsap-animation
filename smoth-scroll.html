@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooth Scroll</title>
+    <link rel="stylesheet" type="text/css" href="css/locomotive-scroll.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap');
+
+    body {
+        font-family: "Signika Negative", sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+    .container {
+        overflow: hidden !important;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    .canvas {
+        position: absolute;
+        right: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 80px;
+        transform-style: preserve-3d;
+        transform-origin: center;
+        z-index: 1;
+    }
+
+    .bottle-wrapper {
+        display: -webkit-flex;
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        z-index: 1;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    section {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    section .heading {
+        position: relative;
+        margin: auto;
+        color: darkgoldenrod;
+        font-size: 40px;
+        z-index: 3;
+    }
+
+    section .text {
+        position: relative;
+        margin: auto;
+        color: white;
+        font-size: 32px;
+        z-index: 3;
+    }
+
+    section.green {
+        background: lightblue;
+    }
+
+    section.grey {
+        background: grey;
+    }
+
+    section.red {
+        background: steelblue;
+    }
+
+    .loader span svg {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translate(55px, 14px);
+        width: 50px;
+    }
+
+    .loader span {
+        position: relative;
+        display: block;
+        color: #fff;
+        font-size: 32px;
+    }
+
+    .loader {
+        display: -webkit-flex;
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -webkit-justify-content: center;
+        justify-content: center;
+        z-index: 9999;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        background-color: lightblue;
+        transition: height 0.5s, opacity 0.5s, visibility 0.5s;
+    }
+
+    .loaded.loader {
+        height: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .cursor {
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+        z-index: 2000;
+        border-radius: 50%;
+        pointer-events: none;
+        height: 25px;
+        width: 25px;
+        border: 2px solid #000;
+        transition: left 0.06s, top 0.06s, transform 0.3s;
+        transition-timing-function: ease-out;
+        transform: scale(0);
+    }
+
+    * {
+        cursor: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="loader">
+            <span>Loading
+                <svg version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+                    <circle fill="#fff" stroke="none" cx="6" cy="50" r="6">
+                        <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1" />
+                    </circle>
+                    <circle fill="#fff" stroke="none" cx="26" cy="50" r="6">
+                        <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2" />
+                    </circle>
+                    <circle fill="#fff" stroke="none" cx="46" cy="50" r="6">
+                        <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3" />
+                    </circle>
+                </svg>
+            </span>
+        </div>
+        <div class="cursor"></div>
+        <section class="green">
+            <div class="heading title">ScrollTrigger & Smooth-Scrollbar</div>
+            <div class="bottle-wrapper">
+                <canvas class="canvas"></canvas>
+            </div>
+        </section>
+        <section class="grey">
+            <div class="text title">Section 2</div>
+        </section>
+        <section class="red">
+            <div class="text title">Section 3</div>
+        </section>
+    </div>
+    <script src="js/gsap.min.js"></script>
+    <script src="js/ScrollTrigger.min.js"></script>
+    <script src="js/locomotive-scroll.min.js"></script>
+    <script src="js/three.min.js"></script>
+    <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const locoScroll = new LocomotiveScroll({
+        el: document.querySelector(".container"),
+        smooth: true,
+        multiplier:0.6,
+        lerp:0.09,
+        reloadOnContextChange: true,
+    });
+
+    ScrollTrigger.scrollerProxy(".container", {
+        scrollTop(value) {
+            return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+        },
+        getBoundingClientRect() {
+            return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+        },
+        pinType: document.querySelector(".container").style.transform ? "transform" : "fixed"
+    });
+    ScrollTrigger.defaults({ scroller: '.container' });
+
+
+    gsap.to('.canvas', {
+        x: '-50%',
+        left: '50%',
+        right: 'auto',
+        scrollTrigger: {
+            trigger: ".green",
+            start: "top top",
+            end: "bottom center",
+            scrub: true,
+            scroller: '.container',
+        }
+    });
+
+    gsap.to('section.grey .text', {
+        rotation: 360,
+        scrollTrigger: {
+            trigger: "section.grey",
+            start: "top top",
+            end: () => "+=" + innerHeight,
+            pin: true,
+            scrub: true,
+            scroller: '.container'
+        }
+    });
+
+    gsap.from("section.red .text", {
+        x: -500,
+        opacity: 0,
+        scrollTrigger: {
+            trigger: "section.red",
+            start: "top 50%",
+            toggleActions: "play none none reset",
+            scroller: '.container',
+        },
+    });
+
+    // // using Javascript
+    const stickyHeader = () => {
+        let elm = document.querySelector(".bottle-wrapper");
+        elm.style.top = locoScroll.scroll.instance.scroll.y + 'px'
+    };
+
+    ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
+    ScrollTrigger.refresh();
+
+
+    window.addEventListener("load", function() {
+        document.querySelector('.loader').classList.add('loaded');
+    });
+
+    //move cursor
+    const circle = document.querySelector('.cursor');
+    const title = document.querySelectorAll('.title');
+    var circleTop = 0,
+        circleLeft = 0;
+
+    document.addEventListener('mouseenter', e => {
+        circle.style.transform = 'scale(1)';
+    });
+
+    document.addEventListener('mouseleave', e => {
+        circle.style.transform = 'scale(0)';
+    });
+
+    title.forEach(function(element, i) {
+        element.addEventListener('mouseenter', e => {
+            circle.style.backgroundColor = '#000';
+            circle.style.transform = 'scale(0.6)';
+        });
+
+        element.addEventListener('mouseleave', e => {
+            circle.style.backgroundColor = '';
+            circle.style.transform = 'scale(1)';
+        });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        circleLeft = e.clientX - circle.offsetHeight / 2;
+        circleTop = e.clientY - circle.offsetWidth / 2;
+    });
+
+    const mouseMove = () => {
+        circle.style.transition = 'left 0.06s ease-out, top 0.06s ease-out, transform 0.3s ease-out';
+        circle.style.top = locoScroll.scroll.instance.scroll.y + circleTop + 'px';
+        circle.style.left = circleLeft + 'px';
+
+        window.requestAnimationFrame(mouseMove);
+    }
+    mouseMove();
+
+    locoScroll.on("scroll", () => {
+        ScrollTrigger.update();
+        stickyHeader();
+
+        circle.style.transition = 'none';
+        circle.style.top = circleTop + locoScroll.scroll.instance.scroll.y + 'px';
+    });
+
+
+
+    // Canvas
+    const canvas = document.querySelector('canvas.canvas')
+
+    // Scene
+    const scene = new THREE.Scene()
+
+    // Objects
+    const geometry = new THREE.TorusGeometry(.7, .2, 16, 100);
+
+    // Materials
+
+    const material = new THREE.MeshBasicMaterial()
+    material.color = new THREE.Color(0xffffff)
+
+    // Mesh
+    const sphere = new THREE.Mesh(geometry, material)
+    scene.add(sphere)
+
+    // Lights
+
+    const pointLight = new THREE.PointLight(0xffffff)
+    pointLight.position.x = 2
+    pointLight.position.y = 3
+    pointLight.position.z = 4
+    scene.add(pointLight)
+
+    /**
+     * Sizes
+     */
+    const sizes = {
+        width: 200,
+        height: 200
+    }
+
+    window.addEventListener('resize', () => {
+        // Update sizes
+        sizes.width = 200,
+        sizes.height = 200
+
+        // Update camera
+        camera.aspect = sizes.width / sizes.height
+        camera.updateProjectionMatrix()
+
+        // Update renderer
+        renderer.setSize(sizes.width, sizes.height)
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    })
+
+    /**
+     * Camera
+     */
+    // Base camera
+    const camera = new THREE.PerspectiveCamera(55, sizes.width / sizes.height, 0.1, 100)
+    camera.position.x = 0
+    camera.position.y = 0
+    camera.position.z = 2
+    scene.add(camera)
+
+    // Controls
+    // const controls = new OrbitControls(camera, canvas)
+    // controls.enableDamping = true
+
+    /**
+     * Renderer
+     */
+    const renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true
+    })
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    /**
+     * Animate
+     */
+
+    // const clock = new THREE.Clock();
+
+    const tick = () => {
+
+        // const elapsedTime = clock.getElapsedTime()
+
+        // Update objects
+        sphere.rotation.y = locoScroll.scroll.instance.scroll.y/200
+
+        // Update Orbital Controls
+        // controls.update()
+
+        // Render
+        renderer.render(scene, camera)
+
+        // Call tick again on the next frame
+        window.requestAnimationFrame(tick)
+    }
+
+    tick()
+    </script>
+</body>
+
+</html>

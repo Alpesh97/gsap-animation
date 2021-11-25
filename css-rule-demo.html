@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+    #violet,
+    #indigo,
+    #blue,
+    #green,
+    #yellow,
+    #orange,
+    #red {
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        transition:width 0.5s,height 0.5s;
+        cursor: pointer;
+    }
+
+    #red.active,
+    #orange.active,
+    #yellow.active,
+    #green.active,
+    #blue.active,
+    #indigo.active,
+    #violet.active {
+        width: 630px;
+        height: 630px;
+    }
+
+    #violet {
+        width: 30px;
+        height: 30px;
+        background-color: violet;
+    }
+
+    #indigo {
+        width: 130px;
+        height: 130px;
+        background-color: indigo;
+    }
+
+    #blue {
+        width: 230px;
+        height: 230px;
+        background-color: blue;
+    }
+
+    #green {
+        width: 330px;
+        height: 330px;
+        background-color: green;
+    }
+
+    #yellow {
+        width: 430px;
+        height: 430px;
+        background-color: yellow;
+    }
+
+    #orange {
+        width: 530px;
+        height: 530px;
+        background-color: orange;
+    }
+
+    #red {
+        width: 630px;
+        height: 630px;
+        background-color: red;
+    }
+
+    .content {
+        max-width: 490px;
+        margin: 0 auto;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+    }
+     .content h1 {
+      font-size: 3em;
+      position: relative;
+    }
+     .content h1 span {
+      display: block;
+      position: relative;
+    }
+     .content p {
+      font-size: 1.2em;
+      line-height: 1.7em;
+      margin-bottom: 2em;
+    }
+    span:after {
+      content: ' ';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 1;
+      transform-origin: 50% 0% 0;
+    }
+</style>
+
+<body>
+    <div id="container">
+        <div class="circle" id="red"></div>
+        <div class="circle" id="orange"></div>
+        <div class="circle" id="yellow"></div>
+        <div class="circle" id="green"></div>
+        <div class="circle" id="blue"></div>
+        <div class="circle" id="indigo"></div>
+        <div class="circle" id="violet"></div>
+    </div>
+    <div class="content">
+        <h1 class="anim1"><span>Welcome to</span><span> GreenSock Animation</span> <span>Tool Demo</span></h1>
+    </div>
+    <script src="js/gsap.min.js"></script>
+    <script src="js/CSSRulePlugin3.min.js"></script>
+    <script>
+		//register the plugin (just once)
+        gsap.registerPlugin(CSSRulePlugin); 
+
+		var rule = CSSRulePlugin.getRule("span:after");
+
+	    // rainbow-animation
+		var color_block = document.querySelectorAll("#container div");
+		for (var i = 0; i < color_block.length; i++) {
+		    color_block[i].onclick = function() {
+		        this.classList.toggle("active");
+		    }
+		}
+
+        // timeline function
+		var tl = gsap.timeline({
+            // repeat: 1, 
+            // yoyo: true,
+            defaults:{
+                duration: 1.5,
+            }
+        });
+
+		// tl.to('.circle',{
+		//     scale:1,
+		//     stagger:0.25,
+		//     // repeat:1,
+		//     // yoyo:true, // for yoyo output repeat property is required
+		//     // xPercent:-50, //transformX or x:"-50%"(it requied on gsap from)
+		//     // yPercent:-50, //transformY or y:"-50%"(it requied on gsap from)
+		//  })
+		 // .to('.circle',{
+   //          duration:1,
+		 //    scale:0.4,
+		 //    left:"15%",
+		 //    top:"20%",
+		 // })
+
+		// for content
+		tl.from(".anim1", {opacity: 0,duration: 0.2})
+		.to(rule,
+            {cssRule: {
+                scaleY: 0
+                }
+            }
+         )
+
+    </script>
+</body>
+</html>

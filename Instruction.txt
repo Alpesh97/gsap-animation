@@ -1,0 +1,291 @@
+=>The gsap object has 3 main method for creating Tweens and optionally adding them to Timelines.
+
+	->1) gsap.to("..",{}) 
+		 	default property mathi aani andar aapela property ma jay (String | Number | Function or bottom or center)
+
+	->2) gsap.from("..",{}) 
+			aani andar aapeli property mathi default property ma jase (String | Number | Function or bottom or center)
+
+	->3) gsap.fromTo(".selector", {fromVars}, {toVars})
+
+		define both start and end values...means default koi value ni jarur nthi....from ma j value hse ema thi to ni value ma animate thse
+
+	Notes:
+	1)koi pn div or element ne transform ni koi property apply karvi hoy to te *display:inline* n hovo joye
+	2)koi pn div or element ni left,top,right,bottom position change karvi hoy to teni *position:static* n hovi joye
+
+
+=>Demo:
+
+	gsap.to(".selector", { // selector text, Array, or object
+	  x: 100, // means translateX or
+	  x: innerWidth * 1, or //window ni width jetli hse etlo translateX plus ma jase jya hse tyathi
+	  x: innerWidth * -1, //window ni width jetli hse etlo translateX minus ma jase jya hse tyathi
+	  xPercent: -100 //means translateX:-100%
+	  left: "15% or 15px" //same for other property,
+	  scale: 2 // = transform:scale(2),
+	  rotation: 360 // = transform:ratate(360),
+	  backgroundColor: "red", 
+	  duration: 1, // animation 1s ma thse (default:0.5 hoy)
+	  delay: 0.5, // animation 0.5s na delay pasi saru thse
+	  ease: "power2.inOut", // transition for animation
+	  stagger: 0.1, // .selector na dbha animatoin, 1 animation pasi 0.1s no delay and pasi biju animation saru thse
+	  paused: true, // default is false...animation pause hse
+	  overwrite: "auto", // default is false
+	  repeat: 2, // number of repeats (-1 for infinite)
+	  yoyo: true, // if true > A-B-B-A, if false > A-B-A-B (true sathe repeat:1 or any number aapvu padse)
+	  repeatDelay: 1, // seconds between repeats
+	  repeatRefresh: true, // invalidates on each repeat
+	  yoyoEase: true, // or ease like "power2"
+	  immediateRender: false,
+	  onComplete: myFunc,
+	  // other callbacks: 
+	  // onStart, onUpdate, onRepeat, onReverseComplete
+	  // Each callback has a params property as well
+	  // i.e. onUpdateParams (Array)
+	});
+
+=>Set Property:
+	
+	// set values immediately (no animation)
+	gsap.set(".selector", {toVars});
+
+=> Default Property:
+
+	// bdha j animation mate 1 duration leje...j animation ma alag duration joitu hoy tema alag thi pn aapi sakiye.
+	gsap.defaults({duration: 1});
+
+=> Stagger Property:
+	
+	//we can also make a complex stagger animation using stagger object ex.-
+
+	gsap.from(element,{
+		stagger:{
+			each: 0.5 //same as simple *stagger: 0.5* bdha element na animation vachche 0.5s no delay lese
+			amount: 1 //for ex. 5 same element che to e bdha element 1s na sarkha bhag ma animate thse one by one.
+			from: "end" // Default stagger animation starting thi saru thay, but aapde eni position pn set kri sakiye
+				: "center" //center point thi banne side e rite animation work karse
+				: "edges" //banne side thi center sudhi e rite animation work karse	
+		}
+
+	})
+
+
+=>Timeline:
+	
+	(multiple element nu animation one by one karvu hoy to timeline no use thay...)
+
+	// Create a timeline
+	let tl = gsap.timeline({
+	  defaults: { // ama set kreli value tl na bdha j animation ma work karse..common property jevu
+	    duration: 1,
+	    ease: "none" 
+	  },
+	  smoothChildTiming: true,
+	  autoRemoveChildren: true,
+	  onComplete: myFunc,
+	  // other callbacks: 
+	  // onStart, onUpdate, onRepeat, onReverseComplete
+	  // Each callback has a params property as well
+	  // i.e. onUpdateParams (Array)
+	});
+
+
+	and then,
+
+	tl.to('ele1',{...}) 
+	  .from('ele2',{...})
+
+	we can also add the delay for our target and it can be relative or absolute
+
+	tl.to(target, {toVars}, positionParameter);
+
+		where positionParameter is absolute or relative delay
+		absolute delay : means direct koi number api daye(ex.-  tl.to(target, {toVars}, 1) )
+						ama 1 etle timeline nu first element nu animation start thse ena pasi 1s na gap pasi aa animation start thse
+		relative delay : means aa delay ena uparna element na animation pr depend rehse...ghani bdhi rite aapi sakiye 					jm k...
+
+						"-=0.7" (overlap with previous by 0.7 sec)
+						"myLabel" (insert at "myLabel" position)
+						"myLabel+=0.2" (0.2 seconds after "myLabel")
+						"<" (ana thi uparna element ni sathe j animation saru thse)
+						"<0.2" (ana thi uparna element nu animation start thya na 0.2s pasi aanu animation saru thse)
+
+=>ScrollTrigger:
+	
+	->First step it to register a plugin: 
+
+		gsap.registerPlugin(ScrollTrigger);
+
+		use scrollTrigger object,
+
+		gsap.from(element,{
+			...,
+			scrollTrigger: {
+    			trigger: '.title-block',
+    			start: "top 80%",
+    			markers: true,
+    			id: "title",
+    			toggleActions: "restart pause play none",
+    		}
+		})
+
+	->toggleClass: {className: 'main-tool-bar--scrolled', targets: '.main-tool-bar'}
+
+	->markers: start and end point show kre
+
+	->id: multiple scrolltrigger object ne different id thi distinguish kri sakiye 
+
+	->trigger: The element on which position we have to trigger enimation(it can be class,id,array,variable,etc.)
+
+	->toggleAction: play none none none
+
+		where keyword can be any like :play", "pause", "resume", "reset", "restart", "complete", "reverse", and "none".
+		1st: when it enters the screen it will work(onEnter)
+		2nd: when it leaves the screen it will work(onLeave)
+		3rd: when it enters back from bottom of the screen it will work(onEnterBack)
+		4th: when it leaves top position of the element it will work(onLeaveBack)
+
+		onEnter: () => $(this).addClass('revealed'),
+	    onLeave: () => $(this).removeClass('revealed'),
+	    onEnterBack: () => $(this).addClass('revealed'),
+	    onLeaveBack: () => $(this).removeClass('revealed'),
+
+	->start: "top top" (String | Number | Function or bottom or center)
+
+		where,
+		1st top is for the elements top position and,
+		2nd top is for the viewports top position.
+
+	->end: "bottom center" (String | Number | Function or bottom or center)
+
+		where,
+		1st top is for the elements top position and,
+		2nd top is for the viewports top position,
+		we can also do a functional relative value like :
+
+		end: () => "+=" + (document.querySelector(".wrapper").offsetWidth) ......means wrapper ni width jetli hse etli width mate work krse ene * or / pn kri sakiye
+
+	->endTrigger: "#footer" (String | Element)
+
+		animation start koi bija section nu thtu hoy ne end koi bija sectiona na relativaly set karvo hoy tyare e section ne aa atr ma pass karvo
+
+	->scroller: "#container" (String | Element)
+
+		default scroller body hoy but jo koi bija scroller ne scroll kravo hoy to ama define karvu
+
+	->markers: true (To see the visualization of start and end point of the animation)
+
+	->scrub: true (scroll jm karta jaye tm animation agal vadhe....teni value  true hse tyare normal transition vagr work karse and number ma apisu(1,2,3.. to smoothly work karse))
+
+	->pin: true (scrollTop jyare trigger element sudhi pohsase tyare body fixed thay jse ane animation work karse)
+
+		value : true or element or string
+
+	->pinSpacing : false 
+
+		(jyare pin true kriye tyare default end ni jetli value hoy etlu padding bottle j element pin thyo che ene lagi jay...to jyare t element or div full width no n hoy to tyare niche white space dekhase...to evu n thva deva mate pinSpacing:false aapvu...tenathi t element ne padding bottom ny lage but t element jyare stick thse ane scroll thse tyare niche no block t element ni upar overlap thse)
+
+	->snap: Number | Array | Function | Object | "labels" (1 / (section.lenght - 1))...means jo vachche scroll muki desu to teni pasini slide pr jse
+
+		(jyare koi horizontal slider bnavyu hoy ane scroll pr slide change thti hoy to scroll ne to jo adhdhi slide pr scroll muki didhu to tene kai side move kravvi tenu logic aya lakhvu)
+
+	->ScrollTrigger.create({
+		...,
+		animation:tl
+	})
+		jo multiple timeline or gsap object ma same scrolltrigger property use thti hoy to aapde scrolltrigger create kri ne tema animation no object pass kri sakiye chiye
+
+	->matchMedia  // To use media query in scrolltrigger
+
+		ScrollTrigger.matchMedia({
+
+			"(max-width : 767px)": function(){
+
+				our login...
+
+			}
+
+			"all": function(){
+				//for all breakpoint
+			}
+		})
+
+	->saveStyles // inline style ne lidhe aapdi css file ma aapeli media ni css override thti hoy to evu n thva deva aapde t element ne savestyle ma add kri sakiye
+
+		ScrollTrigger.saveStyle(".sele1, .sele2");
+
+
+	Make a demo:
+
+	1) https://www.youtube.com/watch?v=t68v3eiMtIU
+	2) https://www.youtube.com/watch?v=D0LgR6yUgbM //smoothScroll with scrollTrigger
+		
+
+Plugins:
+
+1) Text one by one replace karva
+	https://greensock.com/docs/v3/Plugins/TextPlugin
+
+2) Pseudo element ne animation apply karva
+	https://greensock.com/docs/v3/Plugins/CSSRulePlugin
+
+3) To run something on svg path
+	https://greensock.com/docs/v3/Plugins/MotionPathPlugin
+
+4) ScrollToSection
+	https://greensock.com/docs/v3/Plugins/ScrollToPlugin
+
+
+demos:
+
+1) text type thay ne aavta hoy ena mate
+	https://www.youtube.com/watch?v=ZT66N5hBiCE
+
+2) Background Parallax effect
+	https://codepen.io/GreenSock/pen/QWjjYEw
+
+3) Content Parallax effect
+	https://codepen.io/GreenSock/pen/JjYPQpN
+
+4) Section CSS Animation like (aos or animate.it)
+	https://codepen.io/GreenSock/pen/pojzxwZ
+
+5) Lazy load images
+	https://codepen.io/GreenSock/pen/YzydvBE
+
+6) Mousemove animation
+	https://www.youtube.com/watch?v=MEO6yQLAgKw
+
+7) To run car on motionPath
+	https://www.youtube.com/watch?v=BAFAtHe5Cwk
+
+8) Getting mouse move value
+	https://www.youtube.com/watch?v=NqiF5xIuMd0
+
+9) Distortion Effect
+	https://www.youtube.com/watch?v=kzVgkrCiDEo&list=PL8kd7mPFdvbhpThk9H09UkKbVMXd_zM4_
+
+10) Gsap Tutorial
+	https://www.youtube.com/c/GreenSockLearning/videos
+
+11) Free splitText plugin code
+	https://codepen.io/animatedcreativity/pen/wqrPWj
+
+12) We can also get transform matrix value in the form of x,y,scale or skew
+	https://www.youtube.com/watch?v=MjN22sQp5pU
+
+13) How to add our codepen demo to gsap forum
+	https://www.youtube.com/watch?v=ocxuDxhBHPo
+
+14) Motionpath Plugin demo
+	https://www.youtube.com/watch?v=bN3d_YTgvyA
+
+15) Compare image using Draggable line
+	https://codepen.io/bassta/pen/Fypuw
+
+16) Transform perspective
+	https://greensock.com/forums/topic/7102-greensock-javascript-js-suggestion-please-post-full-code-downloadable-demos-for-css-3d-transforms/
+
+17) Reveal Box on viewport
+	https://codepen.io/artyor/pen/QWjOrvO

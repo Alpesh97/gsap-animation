@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap');
+        body { 
+          font-family: "Signika Negative", sans-serif; 
+          font-weight: 400;
+        }
+        *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        .container{
+          max-width: 1440px;
+          padding: 0 25px;
+          margin: 0 auto;
+        }
+        .green.fill-svg {
+            fill: #66ae2c;
+        }
+        .yellow.fill-svg {
+            fill: #fa8503;
+        }
+        .blue.fill-svg {
+            fill: #094286;
+        }
+        .grey.fill-svg {
+            fill: #9099a3;
+        }
+        .svg-element {
+            transform-box: fill-box;
+            -webkit-transform-origin: center center;
+            transform-origin: center center;
+        }
+      .svg-circle {
+        position: relative;
+          mix-blend-mode: multiply;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -ms-flex-line-pack: center;
+          align-content: center;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          overflow: visible;
+          transform-box: fill-box;
+          -webkit-transform-origin: center center;
+          transform-origin: center center;
+          width: 100%;
+      }
+      .bg-inner{
+          left: 0;  
+          right: 0;
+          position: absolute;
+          opacity: 1;
+          top: 0;
+          transform-offset: center top;
+          mix-blend-mode: multiply;
+          overflow: visible;
+          opacity: 1;
+          -webkit-transition: opacity .1s ease,-webkit-transform .3s ease-in;
+          transition: opacity .1s ease,-webkit-transform .3s ease-in;
+          transition: opacity .1s ease,transform .3s ease-in;
+          transition: opacity .1s ease,transform .3s ease-in,-webkit-transform .3s ease-in;
+          transform-offset: center top;
+          width: 80vw;
+          margin: 0 auto;
+      }
+        .slider-section .dots .dot svg{
+          width: 60px;
+          mix-blend-mode: multiply;
+          height: 60px;
+        }
+        .slider-section .dots .navigation-dot{
+          cursor: pointer;
+        }
+        .slider-section .dots .dot.active ul{
+          display: block;
+        }
+        .slider-section .dots .dot svg ~ ul li:last-child{
+          display: none;
+        }
+        .slider-section .dots .dot .green ~ ul li.active{
+            background-color: rgba(102,174,44,1);
+        }
+        .slider-section .dots .dot .green ~ ul li{
+          background-color: rgba(102,174,44,0.4);
+        }
+        .slider-section .dots .dot .yellow ~ ul li.active{
+            background-color: rgba(250,133,3,1);
+        }
+        .slider-section .dots .dot .yellow ~ ul li{
+          background-color: rgba(250,133,3,0.4);
+        }
+        .slider-section .dots .dot .blue ~ ul li.active{
+            background-color: rgba(9,66,134,1);
+        }
+        .slider-section .dots .dot .blue ~ ul li{
+          background-color: rgba(9,66,134,0.4);
+        }
+        .slider-section .dots .dot .grey ~ ul li.active{
+            background-color: rgba(144,153,163,1);
+        }
+        .slider-section .dots .dot .grey ~ ul li{
+          background-color: rgba(144,153,163,0.4);
+        }
+        .slider-section .dots .dot ul li{
+          font-size: 0;
+          height: 12px;
+          margin: 0 auto;
+          width: 12px;
+          border-radius: 50%;
+        }
+        .slider-section .dots .dot ul li + li{
+          margin-top: 5px;
+        }
+        .slider-section .dots .dot + .dot{
+          margin-top: -20px;
+        }
+        .slider-section .dots .dot.active + .dot{
+          margin-top: 0;
+        }
+        .slider-section .dots .dot ul{
+          display: none;
+          list-style: none;
+          text-align: center;
+          margin: 10px 0;
+        }
+        .slider-section .show-navigation .dots{
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+        .slider-section .dots{
+            -webkit-transform: translateX(200%);
+            transform: translateX(200%);
+            position: fixed;
+            z-index: 100;
+            top: 50%;
+            right: 16px;
+            transition: transform ease-in .3s, -webkit-transform ease-in .3s;
+        }
+        .slider-wrapper{
+          position: relative;
+        }
+        .slide:last-child{
+          margin-bottom: 0;
+        }
+        .slide{
+          margin-bottom: 300px;
+        }
+        .content-wrapper .inner-content:last-child{
+          margin-bottom: 0;
+        }
+        .content-wrapper .inner-content{
+          height: 80vh;
+          max-width: 500px;
+          margin: 0 auto;
+          background-color: #fff;
+          border: 1px solid #000;
+          text-align: center;
+          margin-bottom: 50px;
+        }
+        .content-wrapper .block{
+          height: 20vh;
+        } 
+        .content-wrapper{
+          padding: 60px 0;
+          max-width: 800px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        header{
+          position: fixed;
+          width: 100%;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 100px;
+          background-color: rgb(116 116 116);
+          z-index: 10;
+        }
+        main{
+          position: relative;
+          z-index: 1;
+          padding-top: 100px;
+        }
+        footer{
+          height: 80vh;
+          background-color: rgb(116 116 116); 
+          margin-top: 200px;
+        }
+        section{
+          padding: 80px 0 0;
+        }
+        .bg-wrapper {
+          height: 90vh;
+          opacity: 1;
+          overflow: visible;
+          pointer-events: none;
+          position: sticky;
+          top: 0;
+          width: 100%;
+        }
+        .bg-inner.box2,.bg-inner.box3,.bg-inner.box4{
+          transform: translateY(100%);
+        }
+        .bg-inner.box1{
+          transform: translateY(10%); 
+        }
+        .box1 .box1{
+          transform: translateY(-12%); 
+        }
+        .box2 .box1,.box3 .box1,.box4 .box1{
+          transform: translateY(-100%); 
+        }
+        .box2 .box2{
+          transform: translateY(-10%); 
+        }
+        .box3 .box2,.box4 .box2{
+          transform: translateY(-100%); 
+        }
+        .box3 .box3{
+          transform: translateY(-10%); 
+        }
+        .box4 .box3{
+          transform: translateY(-100%); 
+        }
+        .last-box .box1,
+        .last-box .box2,
+        .last-box .box3,
+        .last-box .box4{
+          transform: translateY(-100%); 
+        }
+        .last-box.box4 .box4{
+          transform: translateY(-10%); 
+        }
+        .box4 .box4{
+          transform: translateY(-10%); 
+        }
+        .box2.box1 .box1 {
+            transform: translateY(-75vh);
+        }
+        .box2.box1 .box2 {
+            transform: translateY(25vh);
+        }
+        .box2.box3 .box2 {
+            transform: translateY(-75vh);
+        }
+        .box2.box3 .box3 {
+            transform: translateY(25vh);
+        }
+        .box3.box4 .box3 {
+            transform: translateY(-75vh);
+        }
+        .box3.box4 .box4 {
+            transform: translateY(25vh);
+        }
+        .dummy-section{
+          height: 50vh;
+          background-color: #ccc;
+        }
+        .dummy-block{
+          height: 100vh;
+          width: 100%;
+        }
+        .half-dummy-block{
+          height: 50vh;
+          width: 100%;
+        }
+        .title-block-wrapper {
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+          height: 100vh;
+          left: 0;
+          pointer-events: none;
+          position: fixed;
+          top: 50%;
+          width: 100%;
+
+        }
+        .title-block-wrapper .title-block {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(10%);
+        }
+        .box1 .title-block-wrapper .title-block {
+            transition-delay: 0.4s;
+        }
+        .box1 .title-block-wrapper .box1-title.title-block{
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .box2 .title-block-wrapper .box2-title.title-block{
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .box3 .title-block-wrapper .box3-title.title-block{
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .box4 .title-block-wrapper .box4-title.title-block{
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .box3.box4 .title-block-wrapper .box3-title.title-block,
+        .box2.box3 .title-block-wrapper .box2-title.title-block,
+        .box1.box2 .title-block-wrapper .box1-title.title-block,
+        .title-hide-box1 .title-block-wrapper .box1-title.title-block,
+        .title-hide-box2 .title-block-wrapper .box2-title.title-block,
+        .title-hide-box3 .title-block-wrapper .box3-title.title-block,
+        .title-hide-box4 .title-block-wrapper .box4-title.title-block{
+          opacity: 0;
+          transform: translateY(-10%);
+        }
+        .title-block-wrapper h2{
+          color: #fff;
+          font-size: 60px;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <header></header>
+    <main>
+      <section class="dummy-section"></section>
+      <section class="slider-section">
+        <div class="bg-wrapper">
+          <div class="bg-inner box1">
+            <div class="svg-circle">
+                <svg class="svg-element yellow fill-svg" id="bg-svg-yellow" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+            </div>
+          </div>
+          <div class="bg-inner box2">
+            <div class="svg-circle">
+               <svg class="svg-element blue fill-svg" id="bg-svg-blue" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+            </div>
+          </div>
+          <div class="bg-inner box3">
+            <div class="svg-circle">
+                <svg class="svg-element grey fill-svg" id="bg-svg-grey" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+            </div>
+          </div>
+          <div class="bg-inner box4">
+            <div class="svg-circle">
+                <svg class="svg-element green fill-svg" id="bg-svg-green" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+            </div>
+          </div>
+        </div>
+        <div class="title-block-wrapper">
+          <div class="title-block box1-title">
+              <h2>Lorem Ipsum Doller1</h2>
+          </div>
+          <div class="title-block box2-title">
+              <h2>Lorem Ipsum Doller2</h2>
+          </div>
+          <div class="title-block box3-title">
+              <h2>Lorem Ipsum Doller3</h2>
+          </div>
+          <div class="title-block box4-title">
+              <h2>Lorem Ipsum Doller4</h2>
+          </div>
+        </div>
+        <div class="container">
+          <div class="slider-wrapper">
+            <div class="slider">
+              <div class="slide scrollspy-block active" id="box1">
+                <div class="slide-inner">
+                  <div class="content-wrapper">
+                    <div class="inner-content-wrapper">
+                      <div class="half-dummy-block"></div>
+                      <div class="inner-content scrollspy-inner-block" id="box1-1">box1-1</div>
+                      <div class="inner-content scrollspy-inner-block" id="box1-2">box1-2</div>
+                      <div class="inner-content scrollspy-inner-block" id="box1-3">box1-3</div>
+                      <div class="dummy-block scrollspy-inner-block" id="box1-4"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="slide scrollspy-block" id="box2">
+                <div class="slide-inner">
+                  <div class="content-wrapper">
+                      <div class="inner-content-wrapper">
+                        <div class="half-dummy-block"></div>
+                        <div class="inner-content scrollspy-inner-block" id="box2-1">box2-1</div>
+                        <div class="inner-content scrollspy-inner-block" id="box2-2">box2-2</div>
+                        <div class="inner-content scrollspy-inner-block" id="box2-3">box2-3</div>
+                        <div class="dummy-block scrollspy-inner-block" id="box2-4"></div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="slide scrollspy-block" id="box3">
+                <div class="slide-inner">
+                  <div class="content-wrapper">
+                      <div class="inner-content-wrapper">
+                        <div class="half-dummy-block"></div>
+                        <div class="inner-content scrollspy-inner-block" id="box3-1">box3-1</div>
+                        <div class="inner-content scrollspy-inner-block" id="box3-2">box3-2</div>
+                        <div class="inner-content scrollspy-inner-block" id="box3-3">box1-3</div>
+                        <div class="dummy-block scrollspy-inner-block" id="box3-4"></div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="slide scrollspy-block" id="box4">
+                <div class="slide-inner">
+                  <div class="content-wrapper">
+                      <div class="inner-content-wrapper">
+                        <div class="half-dummy-block"></div>
+                        <div class="inner-content scrollspy-inner-block" id="box4-1">box4-1</div>
+                        <div class="inner-content scrollspy-inner-block" id="box4-2">box4-2</div>
+                        <div class="inner-content scrollspy-inner-block" id="box4-3">box1-3</div>
+                        <div class="dummy-block scrollspy-inner-block" id="box4-4"></div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="dots">
+              <div class="dot navigation-dot active" data-id="box1">
+                <svg class="svg-element yellow fill-svg" id="side-nav-circle-svg-yellow" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+                <ul>
+                  <li class="navigation-inner-dot" data-id="box1-1">1</li>
+                  <li class="navigation-inner-dot" data-id="box1-2">2</li>
+                  <li class="navigation-inner-dot" data-id="box1-3">3</li>
+                  <li class="navigation-inner-dot" data-id="box1-4">4</li>
+                </ul>
+              </div>
+              <div class="dot navigation-dot" data-id="box2">
+                <svg class="svg-element blue fill-svg" id="side-nav-circle-svg-blue" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+                <ul>
+                  <li class="navigation-inner-dot" data-id="box2-1">1</li>
+                  <li class="navigation-inner-dot" data-id="box2-2">2</li>
+                  <li class="navigation-inner-dot" data-id="box2-3">3</li>
+                  <li class="navigation-inner-dot" data-id="box2-4">4</li>
+                </ul>
+              </div>
+              <div class="dot navigation-dot" data-id="box3">
+                <svg class="svg-element grey fill-svg" id="side-nav-circle-svg-grey" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+                <ul>
+                  <li class="navigation-inner-dot" data-id="box3-1">1</li>
+                  <li class="navigation-inner-dot" data-id="box3-2">2</li>
+                  <li class="navigation-inner-dot" data-id="box3-3">3</li>
+                  <li class="navigation-inner-dot" data-id="box3-4">4</li>
+                </ul>
+              </div>
+              <div class="dot navigation-dot" data-id="box4">
+                <svg class="svg-element green fill-svg" id="side-nav-circle-svg-green" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle class="svg-circle" cx="50%" cy="50%" r="50%"></circle></svg>
+                <ul>
+                  <li class="navigation-inner-dot" data-id="box4-1">1</li>
+                  <li class="navigation-inner-dot" data-id="box4-2">2</li>
+                  <li class="navigation-inner-dot" data-id="box4-3">3</li>
+                  <li class="navigation-inner-dot" data-id="box4-4">4</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="dummy-section"></section>
+    </main>
+  </div>
+  <footer></footer>
+    <script src="js/jquery.js"></script>
+    <script src="js/lucid.js"></script>
+    <script>
+
+     $(window).on('load', function() {
+
+      $(this).impulse({
+      });
+    });
+
+     $(window).resize();
+
+      $.fn.isInViewport = function() {
+          var elementTop = $(this).offset().top;
+          var elementBottom = elementTop + $(this).outerHeight();
+
+          var viewportTop = $(window).scrollTop();
+          var viewportBottom = viewportTop + $(window).height();
+
+          return elementBottom > viewportTop && elementTop < viewportBottom;
+      };
+
+      var div_leaght = $('.bg-wrapper .bg-inner').length;
+      function viewPort(){
+          $('.scrollspy-block').each(function() {
+              if ($(this).isInViewport()) { 
+                  var old_scroll = $(this).offset().top - $(window).outerHeight()/4;
+                  var new_scroll = $(window).scrollTop();
+                  if (new_scroll >= old_scroll) {
+                    $('body').addClass('title-hide-' + $(this).attr('id'))
+                  }
+                  else{
+                    $('body').removeClass(function (index, css) {
+                      return (css.match (/\btitle-hide-\S+/g) || []).join(' ');
+                    }); 
+                  }
+                  $('body').addClass($(this).attr('id'));
+                  if (!$('body').hasClass('box' + div_leaght)) {
+                    $('body').removeClass('last-box');
+                  }
+              }
+              else{
+                $('body').removeClass($(this).attr('id'));
+                setTimeout(function(){
+                  if ($('body').hasClass('box' + div_leaght)) {
+                    $('body').addClass('last-box');
+                  }
+                },500);
+              }
+          }); 
+
+          if ($('.slider-wrapper').isInViewport()) { 
+              $('.slider-wrapper').addClass('show-navigation');
+          }
+          else{
+              $('.slider-wrapper').removeClass('show-navigation');
+          }           
+      }
+
+      function scrollspy() {
+          var sTop = $(window).scrollTop();
+          var footer_block = $('footer').offset().top - $('header').innerHeight();
+          if (sTop < footer_block) {
+              $('.scrollspy-block').each(function() {
+                  var id = $(this).attr('id');
+                  offset = $(this).offset().top - $('header').innerHeight() - 1;
+                  height = $(this).height();
+                  if (sTop >= offset && sTop < offset + height) {
+                      cur_link = $('.navigation-dot[data-id = '+id+']');
+                      cur_link.addClass('active').siblings('.navigation-dot').removeClass('active');
+                      $(this).addClass('active').siblings('.scrollspy-block').removeClass('active');
+                  }
+              });
+          }
+      }
+
+      function inner_scrollspy() {
+          var sTop = $(window).scrollTop();
+          var footer_block = $('footer').offset().top - $('header').innerHeight();
+          if (sTop < footer_block) {
+              $('.scrollspy-block.active .scrollspy-inner-block').each(function() {
+                  var id = $(this).attr('id');
+                  var offset_inner = $(this).offset().top - $('header').innerHeight() - 1;
+                  var height_inner = $(this).height();
+                  if (sTop >= offset_inner && sTop < offset_inner + height_inner) {
+                      cur_link = $('.navigation-inner-dot[data-id = '+id+']');
+                      cur_link.addClass('active').siblings('.navigation-inner-dot').removeClass('active');
+                      $(this).addClass('active').siblings('.scrollspy-inner-block').removeClass('active');
+                  }
+              });
+          }
+      }
+
+      $(function(){
+
+        $('.navigation-dot').on('click',function(e){
+            $('body').removeClass('last-box');
+            $('.scrollspy-inner-block, .navigation-inner-dot').removeClass('active');
+            setTimeout(function() {
+              $('body').removeClass(function (index, css) {
+                return (css.match (/\btitle-hide-\S+/g) || []).join(' ');
+              }); 
+            },200);
+            e.stopPropagation();
+            let scrollId = $(this).attr('data-id');
+            $('.navigation-dot').removeClass('active');
+            $(this).closest('.navigation-dot').addClass('active');
+            if ($("#" + scrollId).length) {
+                $('.scrollspy-block').removeClass('active');
+                $("#" + scrollId).addClass('active');
+                let _this_content_offset = $("#" + scrollId).offset().top - $('header').innerHeight();
+                $('html,body').stop().animate({
+                    scrollTop:_this_content_offset
+                },1);
+            }
+        });
+
+        $('.navigation-inner-dot').on('click',function(e){
+          e.stopPropagation();
+            let scrollId_inner = $(this).attr('data-id');
+            $('.navigation-inner-dot').removeClass('active');
+            $(this).closest('.navigation-inner-dot').addClass('active');
+            if ($("#" + scrollId_inner).length) {
+                $('.scrollspy-inner-block').removeClass('active');
+                $("#" + scrollId_inner).addClass('active');
+                let _this_content_offset_inner = $("#" + scrollId_inner).offset().top - $('header').innerHeight();
+                $('html,body').stop().animate({
+                    scrollTop:_this_content_offset_inner
+                },200);
+            }
+        });
+
+        scrollspy();
+        inner_scrollspy();
+        viewPort();
+      });
+
+      /* Window Scroll */
+      $(window).on("scroll",function() {
+          scrollspy();
+          inner_scrollspy();
+          viewPort();
+      });
+
+    </script>
+</body>
+
+</html>

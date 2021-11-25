@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Line</title>
+    <style>
+		.section{
+			height: 50vh;
+			background-color: #282828;
+		}
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.banner-image{position:absolute;display:block;width:100%;top: 0;bottom: 0;right: 0;left: 0;background-repeat: no-repeat;background-position: center;background-size: cover;height: 100%;}
+		.content-block{
+			/*position: absolute;
+		    top: 50%;
+		    left: 0;
+		    transform: translate(0,-50%);*/
+		    max-width: 350px;
+		}
+		.image-block{
+			/*position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%,-50%);*/
+		    max-width: 350px;
+		}
+		.container{
+			max-width: 1140px;
+		    padding: 0 15px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    margin: 0 auto;
+		    position: relative;
+		}
+		h1{
+			font-size: 32px;
+			line-height: 1.321;
+			margin-bottom: 15px;	
+		}
+		p{
+			font-size: 20px;
+		}
+		img{
+			max-width: 100%;
+		}
+		.banner-section{
+			height: 100vh;
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+    </style>
+</head>
+<body>
+
+    <section class="banner-section">
+    	<div class="banner-image" style="background-image: url(images/bg.jpg);"></div>
+		<div class="container">
+			<div class="content-block">
+				<h1>Fighting Cancer with a Single Draw of Blood</h1>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
+			</div>
+			<div class="image-block">
+				<img src="images/img1.jpg" alt="img">
+			</div>
+		</div>
+	</section>
+
+	<section class="section">
+	</section>
+	<section class="section">
+	</section>
+
+    <script src="js/gsap.min.js"></script>
+    <script src="js/ScrollTrigger.min.js"></script>
+    <script>
+
+    	// https://greensock.com/forums/topic/25898-scrolltrigger-pin-offset/
+
+    	gsap.registerPlugin(ScrollTrigger);
+    	
+    	var winht = window.innerHeight,
+    		img_top = document.querySelector(".image-block");
+
+		var bgPin = gsap.timeline({
+    		scrollTrigger: {
+		    trigger: ".banner-image",
+		    scrub: true,
+		    // markers:true,
+		    pin: true,
+		    start: "top top",
+		    end: winht * 0.5,
+		    pinSpacing : false
+		  }	
+    	});
+
+    	var imagePin = gsap.timeline({
+    		scrollTrigger: {
+		    trigger: ".image-block",
+		    scrub: true,
+		    markers:true,
+		    pin: true,
+		    start: "top " + (img_top.offsetTop + 114),
+		    end: winht * 0.2,
+		  }	
+    	})
+
+
+    </script>
+</body>
+</html>
